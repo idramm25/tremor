@@ -1,6 +1,7 @@
 #include <SparkFun_ADXL345.h>         // SparkFun ADXL345 Library
 #include <ArduinoJson.h>
 
+
 ADXL345 adxl = ADXL345();             // USE FOR I2C COMMUNICATION
 
 int interruptPin = 2;                 // Setup pin 2 to be the interrupt pin (for most Arduino Boards)
@@ -21,8 +22,8 @@ boolean rangeFlag;
 void setup(){
   
   Serial.begin(115200);                 // Start the serial terminal
-  Serial.println("Tremorograph ADXL345 v1.0");
-  Serial.println();
+//  Serial.println("Tremorograph ADXL345 v1.0");
+//  Serial.println();
   adxl.powerOn();                     // Power on the ADXL345
   adxl.dataReadyINT(0);
 
@@ -82,26 +83,14 @@ void configuration(void)
                 StaticJsonDocument<10> doc;
                 doc["rate"] = adxl.getRate();;
                 serializeJson(doc, Serial);
+                Serial.println();
                 conFlag = true;
-//                while (Serial.available() == 0)
-//                  {
-//                    delay(100);
-//                  }
-                deserializeJson(doc, Serial);
               }
             else if (doc["start"])    //{"start":15}
               {
                 duration = doc["start"].as<int>();
                 count = dataRate * duration;
                 startFlag = true;
-                StaticJsonDocument<10> doc;
-                doc["count"] = count;
-                serializeJson(doc, Serial);
-//                while (Serial.available() == 0)
-//                  {
-//                    delay(100);
-//                  }
-                deserializeJson(doc, Serial);
                 standbyFlag = false;
                 adxl.dataReadyINT(1);    // Turn on Interrupts for each mode (1 == ON, 0 == OFF)
               }
@@ -113,11 +102,7 @@ void configuration(void)
                 StaticJsonDocument<10> doc;
                 doc["manualstop"] = 1;
                 serializeJson(doc, Serial);
-//                while (Serial.available() == 0)
-//                  {
-//                    delay(100);
-//                  }
-                deserializeJson(doc, Serial);      
+                Serial.println();
               }
             else if (doc["led"])
               {
@@ -125,10 +110,7 @@ void configuration(void)
                 StaticJsonDocument<20> doc;
                 doc["led"] = digitalRead(LED_BUILTIN);
                 serializeJson(doc, Serial);
-//                while (Serial.available() == 0)
-//                  {
-//                    delay(100);
-//                  }
+                Serial.println();
                 }
             else 
               {
@@ -165,6 +147,7 @@ void loop(){
     doc["y"] = y;
     doc["z"] = z;
     serializeJson(doc, Serial);
+    Serial.println();
     interruptFlag = false;
   }
   else if (startFlag == false){

@@ -6,6 +6,9 @@ from PyQt5 import QtWidgets, uic
 from PyQt5.QtSerialPort import QSerialPort, QSerialPortInfo
 from PyQt5.QtCore import QIODevice
 import json
+from pyqtgraph import PlotWidget
+import pyqtgraph as pg
+
 
 app = QtWidgets.QApplication([])
 ui = uic.loadUi("design.ui")
@@ -15,7 +18,7 @@ serial = QSerialPort()
 serial.setBaudRate(115200)
 serial.setReadBufferSize(0)
 portList = []
-speedList = ["25", "50", "100", "200", "400"]
+speedList = ["6", "25", "50", "100", "200", "400"]
 gravityList = ["2", "4", "8", "16"]
 ports = QSerialPortInfo.availablePorts()
 for port in ports:
@@ -25,20 +28,56 @@ ui.speedRate.addItems(speedList)
 ui.gravityRange.addItems(gravityList)
 
 
-# drate =""
-
+listX = []
+# for x in range(100): listX.append(x)
+listY = []
+# for y in range(100): listY.append(0)
+listY1 = []
+listY2 = []
 
 def onRead():
-    try:
-        j = json.loads(str(serial.readAll(), 'utf-8'))
-        print(type(j['led']))
-        ui.term.appendPlainText(str(j['led']))
-        # print(rx)
-    except:
-        rx = serial.readAll()
-        rxs = str(rx, 'utf-8')
-        ui.term.appendPlainText(rxs)
-        print(rx)
+    if serial.canReadLine():
+        j = json.loads(str(serial.readLine(), 'utf-8'))
+        if "led" in j:
+            ui.term.appendPlainText(str(j['led']))
+        elif "rate" in j:
+            ui.term.appendPlainText(str(j['rate']))
+        elif "count" in j:
+            c = j['count']
+            x = j['x']
+            y = j['y']
+            z = j['z']
+            global listX
+            global listY
+            global listY1
+            global listY2
+            listY = listY[1:]
+            listY1 = listY1[1:]
+            listY2 = listY2[1:]
+            listY.append(x)
+            listY1.append(y)
+            listY2.append(z)
+            ui.graph.clear()
+            ui.graph.plot(listX, listY)
+            # ui.graph.plot(listX, listY1)
+            # ui.graph.plot(listX, listY2)
+            setProgBar(c)
+            ui.term.appendPlainText("count: " + str(c) + "x: " + str(x) + "y: " + str(y) + "z: " + str(z))
+        elif "manualstop" in j:
+            ui.term.appendPlainText("Manual stop")
+
+
+def getMaxCount():
+    max_count = int(ui.dur.value()) * int(ui.speedRate.currentText())
+    return max_count
+
+
+
+def setProgBar(c):
+    count = c
+    max_count = int(ui.dur.value()) * int(ui.speedRate.currentText())
+    i = 100 * (max_count - count) / max_count
+    ui.progressBar.setValue(int(i))
 
 
 def onOpen():
@@ -67,8 +106,8 @@ def sendSettings():  # setup string to device {"g-range":2,"d-rate":100}
         "g-range": str(grange),
         "d-rate": float(drate)
     }
-    # print(drate)
     serialSend(s)
+
 
 
 def startMeasuring():
@@ -77,8 +116,13 @@ def startMeasuring():
     s = {
         "start": str(duration)
     }
-    # d = int(duration)
-    # print(d*drate)
+    c = getMaxCount()
+    global listX
+    global listY
+    del listX[:]
+    del listY[:]
+    for x in range(c): listX.append(x)
+    for y in range(c): listY.append(0)
     serialSend(s)
 
 
@@ -86,7 +130,6 @@ def stopMeasuring():  # string for stop: {"stop":1}
     s = {
         "stop": 1
     }
-    print("stop")
     serialSend(s)
 
 
@@ -97,29 +140,25 @@ def led():
     serialSend(s)
 
 
-# def pin3Control(val):
-#     if val == 2: val = 1;
-#     serialSend([2, val])
-
-
 def setProgVal():
     ui.progLabel.setText(str(int(ui.dur.value()) * int(ui.speedRate.currentText())))
 
 
-def setProgBar():
-    i = int(str(int(ui.dur.value()) * int(ui.speedRate.currentText())))
-    ui.progressBar.setValue(i)
+def graphClear():
+    global listX
+    global listY
+    del listX[:]
+    del listY[:]
+    ui.graph.clear()
 
 
+def newWinPlot():
+    global listX
+    global listY
+    pg.plot(listX, listY)
 
 ui.speedRate.currentIndexChanged.connect(setProgVal)
 ui.dur.valueChanged.connect(setProgVal)
-
-
-# def checkpPogress():
-#     if ui.speedRate.currentTextChanged.connect() or ui.dur.valueChanged.connect():
-#         print("12")
-
 
 serial.readyRead.connect(onRead)
 ui.openB.clicked.connect(onOpen)
@@ -129,11 +168,13 @@ ui.setB.clicked.connect(sendSettings)
 ui.startB.clicked.connect(startMeasuring)
 ui.stopB.clicked.connect(stopMeasuring)
 ui.saveFile.clicked.connect(led)
+ui.clearB.clicked.connect(graphClear)
+ui.newW.clicked.connect(newWinPlot)
 
 # ui.pin3.stateChanged.connect(pin3Control)
 
 ui.progLabel.setText(str(int(ui.dur.value()) * int(ui.speedRate.currentText())))
-setProgBar()
+ui.progressBar.setValue(0)
 
 ui.show()
 sys.exit(app.exec())

@@ -740,7 +740,7 @@ void ADXL345::setInterrupt(byte interruptBit, bool state) {
 }
 
 //////////////////////////////////////////////////////////////////
-void ADXL345::dataReadyINT(bool status) {			//<<<<------------ADDED
+void ADXL345::dataReadyINT(bool status) {			                   //<<<<------------ADDED
 	if(status) {						//
 	setInterrupt( ADXL345_INT_DATA_READY_BIT, 1);		//
 	}							//
