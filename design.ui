@@ -6,25 +6,25 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>741</width>
-    <height>566</height>
+    <width>722</width>
+    <height>619</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="saveFile">
+   <widget class="QPushButton" name="ledButton">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>500</y>
-      <width>91</width>
+      <x>10</x>
+      <y>490</y>
+      <width>41</width>
       <height>26</height>
      </rect>
     </property>
     <property name="text">
-     <string>Save file</string>
+     <string>Led</string>
     </property>
    </widget>
    <widget class="QPlainTextEdit" name="term">
@@ -32,7 +32,7 @@
      <rect>
       <x>10</x>
       <y>310</y>
-      <width>151</width>
+      <width>161</width>
       <height>171</height>
      </rect>
     </property>
@@ -478,6 +478,9 @@
       </disabled>
      </palette>
     </property>
+    <property name="statusTip">
+     <string>Terminal</string>
+    </property>
     <property name="verticalScrollBarPolicy">
      <enum>Qt::ScrollBarAlwaysOff</enum>
     </property>
@@ -508,10 +511,23 @@
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
-       <widget class="QComboBox" name="comL"/>
+       <widget class="QComboBox" name="comL">
+        <property name="toolTip">
+         <string>Manage Com ports with this list</string>
+        </property>
+        <property name="statusTip">
+         <string>Com port menu</string>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="QPushButton" name="openB">
+        <property name="toolTip">
+         <string>This button is uses for opening port</string>
+        </property>
+        <property name="statusTip">
+         <string>Open port</string>
+        </property>
         <property name="text">
          <string>Open port</string>
         </property>
@@ -519,6 +535,12 @@
       </item>
       <item>
        <widget class="QPushButton" name="closeB">
+        <property name="toolTip">
+         <string>This button is for closing port if need to reboot device</string>
+        </property>
+        <property name="statusTip">
+         <string>Close port</string>
+        </property>
         <property name="text">
          <string>Close port</string>
         </property>
@@ -550,13 +572,33 @@
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_3">
       <item>
-       <widget class="QComboBox" name="speedRate"/>
+       <widget class="QComboBox" name="speedRate">
+        <property name="toolTip">
+         <string>Set measuring speed Hz</string>
+        </property>
+        <property name="statusTip">
+         <string>Measuring speed </string>
+        </property>
+       </widget>
       </item>
       <item>
-       <widget class="QComboBox" name="gravityRange"/>
+       <widget class="QComboBox" name="gravityRange">
+        <property name="toolTip">
+         <string>Set measuring gravity range G</string>
+        </property>
+        <property name="statusTip">
+         <string>Measuring gravity range</string>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="QPushButton" name="setB">
+        <property name="toolTip">
+         <string>This button is uses for apply measuring settings and send them to device</string>
+        </property>
+        <property name="statusTip">
+         <string>Set settings</string>
+        </property>
         <property name="text">
          <string>Set</string>
         </property>
@@ -592,6 +634,12 @@
        <bold>true</bold>
       </font>
      </property>
+     <property name="toolTip">
+      <string>This button is uses for abort measuring</string>
+     </property>
+     <property name="statusTip">
+      <string>Press to abort</string>
+     </property>
      <property name="text">
       <string>STOP</string>
      </property>
@@ -624,6 +672,12 @@
         <property name="mouseTracking">
          <bool>true</bool>
         </property>
+        <property name="toolTip">
+         <string>This is duration of measuring Sec</string>
+        </property>
+        <property name="statusTip">
+         <string>Analysis duration</string>
+        </property>
         <property name="value">
          <double>4.000000000000000</double>
         </property>
@@ -652,6 +706,15 @@
        <width>101</width>
        <height>51</height>
       </rect>
+     </property>
+     <property name="toolTip">
+      <string>This button is uses for start measuring</string>
+     </property>
+     <property name="statusTip">
+      <string>Press to start</string>
+     </property>
+     <property name="whatsThis">
+      <string/>
      </property>
      <property name="autoFillBackground">
       <bool>false</bool>
@@ -725,6 +788,12 @@
      <property name="mouseTracking">
       <bool>false</bool>
      </property>
+     <property name="toolTip">
+      <string>This is a progress bar of measuring process</string>
+     </property>
+     <property name="statusTip">
+      <string>Progress status bar</string>
+     </property>
      <property name="whatsThis">
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Measuring progress&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
@@ -754,6 +823,12 @@
        <italic>true</italic>
        <bold>true</bold>
       </font>
+     </property>
+     <property name="toolTip">
+      <string>This is totall points of measuring</string>
+     </property>
+     <property name="statusTip">
+      <string>Measuring count</string>
      </property>
      <property name="text">
       <string>TextLabel</string>
@@ -863,6 +938,9 @@
        <height>21</height>
       </rect>
      </property>
+     <property name="statusTip">
+      <string>Doctor name</string>
+     </property>
     </widget>
     <widget class="QLineEdit" name="patientAge">
      <property name="geometry">
@@ -873,6 +951,9 @@
        <height>21</height>
       </rect>
      </property>
+     <property name="statusTip">
+      <string>Patient age</string>
+     </property>
     </widget>
     <widget class="QTextEdit" name="description">
      <property name="geometry">
@@ -882,6 +963,9 @@
        <width>256</width>
        <height>133</height>
       </rect>
+     </property>
+     <property name="statusTip">
+      <string>Description</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_9">
@@ -906,6 +990,9 @@
        <height>29</height>
       </rect>
      </property>
+     <property name="statusTip">
+      <string>Date of birth</string>
+     </property>
      <property name="dateTime">
       <datetime>
        <hour>0</hour>
@@ -926,6 +1013,9 @@
        <height>21</height>
       </rect>
      </property>
+     <property name="statusTip">
+      <string>Patient name</string>
+     </property>
      <property name="text">
       <string>Вергелес Даниил Павлович</string>
      </property>
@@ -934,83 +1024,309 @@
    <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
      <rect>
-      <x>230</x>
+      <x>180</x>
       <y>310</y>
-      <width>481</width>
-      <height>221</height>
+      <width>531</width>
+      <height>276</height>
      </rect>
     </property>
-    <property name="currentIndex">
-     <number>0</number>
+    <property name="statusTip">
+     <string>Graph right, Graph left and Tables</string>
     </property>
-    <widget class="QWidget" name="tab">
+    <property name="currentIndex">
+     <number>2</number>
+    </property>
+    <widget class="QWidget" name="tabRight">
      <attribute name="title">
-      <string>Graph</string>
+      <string>Graph right</string>
      </attribute>
-     <widget class="PlotWidget" name="graph">
+     <widget class="PlotWidget" name="graphRight">
       <property name="geometry">
        <rect>
         <x>10</x>
         <y>10</y>
-        <width>461</width>
-        <height>171</height>
+        <width>511</width>
+        <height>201</height>
        </rect>
       </property>
      </widget>
-     <widget class="QPushButton" name="clearB">
+     <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
        <rect>
-        <x>390</x>
+        <x>331</x>
         <y>20</y>
-        <width>75</width>
-        <height>26</height>
+        <width>181</width>
+        <height>28</height>
        </rect>
       </property>
-      <property name="text">
-       <string>Clear</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="newW">
-      <property name="geometry">
-       <rect>
-        <x>310</x>
-        <y>20</y>
-        <width>75</width>
-        <height>26</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Window</string>
-      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_5">
+       <item>
+        <widget class="QPushButton" name="fillTR">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Filling table for the right hand&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Fill table</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="newWR">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Open graph in new window&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="statusTip">
+          <string>New window graph</string>
+         </property>
+         <property name="text">
+          <string>Window</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="clearBR">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Clear graph data&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="statusTip">
+          <string>Clear graph</string>
+         </property>
+         <property name="text">
+          <string>Clear</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </widget>
-    <widget class="QWidget" name="tab_2">
+    <widget class="QWidget" name="tabLeft">
+     <attribute name="title">
+      <string>Graph left</string>
+     </attribute>
+     <widget class="PlotWidget" name="graphLeft">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>511</width>
+        <height>201</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QWidget" name="layoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>331</x>
+        <y>20</y>
+        <width>181</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_6">
+       <item>
+        <widget class="QPushButton" name="fillTL">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Filling table for the left hand&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Fill table</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="newWL">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Open graph in new window&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="statusTip">
+          <string>New window graph</string>
+         </property>
+         <property name="text">
+          <string>Window</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="clearBL">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Clear graph data&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="statusTip">
+          <string>Clear graph</string>
+         </property>
+         <property name="text">
+          <string>Clear</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tabTable">
      <attribute name="title">
       <string>Tables</string>
      </attribute>
      <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>10</y>
-        <width>461</width>
+        <x>-1</x>
+        <y>25</y>
+        <width>526</width>
         <height>171</height>
        </rect>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <widget class="QTableWidget" name="tableWidget"/>
+        <widget class="QTableWidget" name="rightTable">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="font">
+          <font>
+           <kerning>true</kerning>
+          </font>
+         </property>
+         <property name="statusTip">
+          <string>Right graph table</string>
+         </property>
+         <attribute name="horizontalHeaderDefaultSectionSize">
+          <number>51</number>
+         </attribute>
+         <column>
+          <property name="text">
+           <string>Count</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>X-axis</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Y-axis</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Z-axis</string>
+          </property>
+         </column>
+        </widget>
        </item>
        <item>
-        <widget class="QTableView" name="tableView"/>
+        <widget class="QTableWidget" name="leftTable">
+         <attribute name="horizontalHeaderDefaultSectionSize">
+          <number>51</number>
+         </attribute>
+         <column>
+          <property name="text">
+           <string>Count</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>X-axis</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Y-axis</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Z-axis</string>
+          </property>
+         </column>
+        </widget>
        </item>
       </layout>
      </widget>
-    </widget>
-    <widget class="QWidget" name="tab_3">
-     <attribute name="title">
-      <string>Страница</string>
-     </attribute>
+     <widget class="QLabel" name="label_2">
+      <property name="geometry">
+       <rect>
+        <x>5</x>
+        <y>5</y>
+        <width>101</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Right hand table</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_10">
+      <property name="geometry">
+       <rect>
+        <x>270</x>
+        <y>5</y>
+        <width>96</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Lefthand table</string>
+      </property>
+     </widget>
+     <widget class="QWidget" name="layoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>35</x>
+        <y>205</y>
+        <width>191</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_7">
+       <item>
+        <widget class="QPushButton" name="clearTabRight">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Clear table data&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Clear table</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="saveCSVRight">
+         <property name="text">
+          <string>Save to CSV</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="layoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>295</x>
+        <y>205</y>
+        <width>191</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_8">
+       <item>
+        <widget class="QPushButton" name="clearTabLeft">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Clear table data&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Clear table</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="saveCSVLeft">
+         <property name="text">
+          <string>Save to CSV</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </widget>
   </widget>
