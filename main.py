@@ -92,37 +92,43 @@ def onRead():
 
 
 def writeCSV():
+    if ui.saveCSVRight:
+        print("right")
+    elif ui.saveCSVLeft:
+        print("left")
     # Python program to convert
     # JSON file to CSV
     # Opening JSON file and loading the data
     # into the variable data
-    with open('data.json') as json_file:
-        data = json.load(json_file)
+    # with open('data.json') as json_file:
+    #     data = json.load(json_file)
+    #
+    # employee_data = data['emp_details']
+    #
+    # # now we will open a file for writing
+    # data_file = open('data_file.csv', 'w')
+    #
+    # # create the csv writer object
+    # csv_writer = csv.writer(data_file)
+    #
+    # # Counter variable used for writing
+    # # headers to the CSV file
+    # count = 0
+    #
+    # for emp in employee_data:
+    #     if count == 0:
+    #         # Writing headers of CSV file
+    #         header = emp.keys()
+    #         csv_writer.writerow(header)
+    #         count += 1
+    #
+    #     # Writing data of CSV file
+    #     csv_writer.writerow(emp.values())
+    #
+    # data_file.close()
 
-    employee_data = data['emp_details']
 
-    # now we will open a file for writing
-    data_file = open('data_file.csv', 'w')
-
-    # create the csv writer object
-    csv_writer = csv.writer(data_file)
-
-    # Counter variable used for writing
-    # headers to the CSV file
-    count = 0
-
-    for emp in employee_data:
-        if count == 0:
-            # Writing headers of CSV file
-            header = emp.keys()
-            csv_writer.writerow(header)
-            count += 1
-
-        # Writing data of CSV file
-        csv_writer.writerow(emp.values())
-
-    data_file.close()
-
+# -------------------------------------------------------------------------
 
 # class CustomDialog(QDialog):  # https://www.pythonguis.com/tutorials/pyqt-dialogs/
 #     def __init__(self, parent=None):
@@ -311,7 +317,13 @@ ui.fillTR.clicked.connect(loadTableDataRight)
 ui.fillTL.clicked.connect(loadTableDataLeft)
 ui.clearTabRight.clicked.connect(clearRightTab)
 ui.clearTabLeft.clicked.connect(clearLeftTab)
-ui.saveFCSVRight.clicked.connect(writeCSV)
+ui.saveCSVLeft.clicked.connect(test())
+ui.saveCSVRight.clicked.connect(writeCSV)
+
+def test(i):
+    if i:
+        print("i")
+
 # ---------------------------------------------
 ui.progLabel.setText(str(int(ui.dur.value()) * int(ui.speedRate.currentText())))
 ui.progressBar.setValue(0)

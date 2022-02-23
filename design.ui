@@ -1017,7 +1017,7 @@
       <string>Patient name</string>
      </property>
      <property name="text">
-      <string>Вергелес Даниил Павлович</string>
+      <string>patient name here</string>
      </property>
     </widget>
    </widget>
@@ -1272,9 +1272,9 @@
      <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
        <rect>
-        <x>35</x>
+        <x>55</x>
         <y>205</y>
-        <width>191</width>
+        <width>152</width>
         <height>28</height>
        </rect>
       </property>
@@ -1301,9 +1301,9 @@
      <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
        <rect>
-        <x>295</x>
+        <x>315</x>
         <y>205</y>
-        <width>191</width>
+        <width>152</width>
         <height>28</height>
        </rect>
       </property>
