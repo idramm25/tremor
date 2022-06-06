@@ -1,6 +1,7 @@
 # The tremor project
-Tremorograph based on Arduino board + ADXL345 accelerometer module. 
-Modifiead ADXL345 SparkFun library for special options is included to "device" folder.
+Tremorograph based on Arduino board + ADXL345 accelerometer module.
+This device is measures hand shake. For doing measuring put sensor on hand and start measuring.
+Modified ADXL345 SparkFun library for special options is included to "device" folder.
 The device is using JSON over Serial protocol to communicate with desktop app.
 Desktop app was made in Python and PyQt5.
 
