@@ -18,7 +18,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>490</y>
+      <y>530</y>
       <width>41</width>
       <height>26</height>
      </rect>
@@ -31,7 +31,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>310</y>
+      <y>350</y>
       <width>161</width>
       <height>171</height>
      </rect>
@@ -479,7 +479,7 @@
      </palette>
     </property>
     <property name="statusTip">
-     <string>Terminal</string>
+     <string/>
     </property>
     <property name="verticalScrollBarPolicy">
      <enum>Qt::ScrollBarAlwaysOff</enum>
@@ -516,7 +516,7 @@
          <string>Manage Com ports with this list</string>
         </property>
         <property name="statusTip">
-         <string>Com port menu</string>
+         <string/>
         </property>
        </widget>
       </item>
@@ -526,7 +526,7 @@
          <string>This button is uses for opening port</string>
         </property>
         <property name="statusTip">
-         <string>Open port</string>
+         <string/>
         </property>
         <property name="text">
          <string>Open port</string>
@@ -539,7 +539,7 @@
          <string>This button is for closing port if need to reboot device</string>
         </property>
         <property name="statusTip">
-         <string>Close port</string>
+         <string/>
         </property>
         <property name="text">
          <string>Close port</string>
@@ -577,7 +577,7 @@
          <string>Set measuring speed Hz</string>
         </property>
         <property name="statusTip">
-         <string>Measuring speed </string>
+         <string/>
         </property>
        </widget>
       </item>
@@ -587,7 +587,7 @@
          <string>Set measuring gravity range G</string>
         </property>
         <property name="statusTip">
-         <string>Measuring gravity range</string>
+         <string/>
         </property>
        </widget>
       </item>
@@ -597,7 +597,7 @@
          <string>This button is uses for apply measuring settings and send them to device</string>
         </property>
         <property name="statusTip">
-         <string>Set settings</string>
+         <string/>
         </property>
         <property name="text">
          <string>Set</string>
@@ -638,7 +638,7 @@
       <string>This button is uses for abort measuring</string>
      </property>
      <property name="statusTip">
-      <string>Press to abort</string>
+      <string/>
      </property>
      <property name="text">
       <string>STOP</string>
@@ -676,7 +676,7 @@
          <string>This is duration of measuring Sec</string>
         </property>
         <property name="statusTip">
-         <string>Analysis duration</string>
+         <string/>
         </property>
         <property name="value">
          <double>4.000000000000000</double>
@@ -711,7 +711,7 @@
       <string>This button is uses for start measuring</string>
      </property>
      <property name="statusTip">
-      <string>Press to start</string>
+      <string/>
      </property>
      <property name="whatsThis">
       <string/>
@@ -724,6 +724,9 @@
      </property>
      <property name="text">
       <string>Start measuring</string>
+     </property>
+     <property name="flat">
+      <bool>false</bool>
      </property>
     </widget>
    </widget>
@@ -792,7 +795,7 @@
       <string>This is a progress bar of measuring process</string>
      </property>
      <property name="statusTip">
-      <string>Progress status bar</string>
+      <string/>
      </property>
      <property name="whatsThis">
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Measuring progress&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -876,25 +879,6 @@
     <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>220</y>
-       <width>89</width>
-       <height>51</height>
-      </rect>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout_4">
-      <item>
-       <widget class="QLabel" name="label_8">
-        <property name="text">
-         <string>Date of birth:</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-    <widget class="QWidget" name="layoutWidget">
-     <property name="geometry">
-      <rect>
        <x>100</x>
        <y>20</y>
        <width>258</width>
@@ -939,7 +923,7 @@
       </rect>
      </property>
      <property name="statusTip">
-      <string>Doctor name</string>
+      <string/>
      </property>
     </widget>
     <widget class="QLineEdit" name="patientAge">
@@ -952,7 +936,7 @@
       </rect>
      </property>
      <property name="statusTip">
-      <string>Patient age</string>
+      <string/>
      </property>
     </widget>
     <widget class="QTextEdit" name="description">
@@ -965,7 +949,7 @@
       </rect>
      </property>
      <property name="statusTip">
-      <string>Description</string>
+      <string/>
      </property>
     </widget>
     <widget class="QLabel" name="label_9">
@@ -991,17 +975,24 @@
       </rect>
      </property>
      <property name="statusTip">
-      <string>Date of birth</string>
+      <string/>
      </property>
      <property name="dateTime">
       <datetime>
        <hour>0</hour>
        <minute>0</minute>
        <second>0</second>
-       <year>2000</year>
-       <month>1</month>
+       <year>2022</year>
+       <month>5</month>
        <day>1</day>
       </datetime>
+     </property>
+     <property name="date">
+      <date>
+       <year>2022</year>
+       <month>5</month>
+       <day>1</day>
+      </date>
      </property>
     </widget>
     <widget class="QLineEdit" name="patientName">
@@ -1014,10 +1005,23 @@
       </rect>
      </property>
      <property name="statusTip">
-      <string>Patient name</string>
+      <string/>
      </property>
      <property name="text">
-      <string>patient name here</string>
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_8">
+     <property name="geometry">
+      <rect>
+       <x>11</x>
+       <y>230</y>
+       <width>91</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Research date:</string>
      </property>
     </widget>
    </widget>
@@ -1031,10 +1035,10 @@
      </rect>
     </property>
     <property name="statusTip">
-     <string>Graph right, Graph left and Tables</string>
+     <string/>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tabRight">
      <attribute name="title">
@@ -1076,7 +1080,7 @@
           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Open graph in new window&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="statusTip">
-          <string>New window graph</string>
+          <string/>
          </property>
          <property name="text">
           <string>Window</string>
@@ -1089,7 +1093,7 @@
           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Clear graph data&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="statusTip">
-          <string>Clear graph</string>
+          <string/>
          </property>
          <property name="text">
           <string>Clear</string>
@@ -1139,7 +1143,7 @@
           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Open graph in new window&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="statusTip">
-          <string>New window graph</string>
+          <string/>
          </property>
          <property name="text">
           <string>Window</string>
@@ -1152,7 +1156,7 @@
           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Clear graph data&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="statusTip">
-          <string>Clear graph</string>
+          <string/>
          </property>
          <property name="text">
           <string>Clear</string>
@@ -1187,7 +1191,7 @@
           </font>
          </property>
          <property name="statusTip">
-          <string>Right graph table</string>
+          <string/>
          </property>
          <attribute name="horizontalHeaderDefaultSectionSize">
           <number>51</number>
@@ -1328,6 +1332,27 @@
       </layout>
      </widget>
     </widget>
+   </widget>
+   <widget class="QPushButton" name="pushButton">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>310</y>
+      <width>141</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>11</pointsize>
+      <weight>75</weight>
+      <italic>true</italic>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Create entry</string>
+    </property>
    </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>

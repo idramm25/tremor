@@ -1,12 +1,12 @@
 # starting sudo from venv for port access:
 # sudo -E env PATH=$PATH python main.py
 import sys
-
+from datetime import date
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtSerialPort import QSerialPort, QSerialPortInfo
-from PyQt5.QtCore import QIODevice
+from PyQt5.QtCore import QIODevice, QDate
 import pyqtgraph as pg
-from PyQt5.QtWidgets import QDialog, QVBoxLayout, QLabel, QDialogButtonBox
+from PyQt5.QtWidgets import QMessageBox, QFileDialog, QWidget
 # from saveFileDialog import app
 
 import json
@@ -60,8 +60,11 @@ def onRead():
             rl = 2
             measuringLeft.append(j)
         # elif "rate" not in j and ui.tabTable.isVisible():
+        #     showCriticalDialog()
+        #     serial.flush()
+        #     return
         #     # dlg = CustomDialog()
-        #     # dlg.exec()
+        # dlg.exec()
 
         if "led" in j:
             ui.term.appendPlainText(str(j['led']))
@@ -91,11 +94,88 @@ def onRead():
         drawGraph(rl)
 
 
-def writeCSV():
-    if ui.saveCSVRight:
-        print("right")
-    elif ui.saveCSVLeft:
-        print("left")
+# def saveFileDialog():
+#     options = QFileDialog.Options()
+#     options |= QFileDialog.DontUseNativeDialog
+#     name, _ = QFileDialog.getSaveFileName(None,
+#                                           "", "CSV Files (*.csv);;All Files (*)",
+#                                           options=options)
+#     file = open(name, 'w')
+#     # text = self.textEdit.toPlainText()
+#     text = "hello"
+#     file.write(text)
+#     file.close()
+
+
+class SaveFile(QWidget):
+
+    def __init__(self):
+        super().__init__(self)
+        self.title = 'PyQt5 file dialogs - pythonspot.com'
+        self.left = 10
+        self.top = 10
+        self.width = 640
+        self.height = 480
+        self.initUI()
+
+    def initUI(self):
+        self.setWindowTitle(self.title)
+        self.setGeometry(self.left, self.top, self.width, self.height)
+        # self.openFileNameDialog()
+        # self.openFileNamesDialog()
+        # self.saveFileDialog()
+        self.file_save()
+        # self.show()
+
+    def file_save(self):
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        name, _ = QFileDialog.getSaveFileName(self, "QFileDialog.getSaveFileName()", "", "CSV Files (*.csv);;All Files (*)", options=options)
+        file = open(name,'w')
+        # text = self.textEdit.toPlainText()
+        text = "hello"
+        file.write(text)
+        file.close()
+
+def showCriticalDialog(msg):
+    msg = msg
+    msgBox = QMessageBox()
+    msgBox.setIcon(QMessageBox.Critical)
+    msgBox.setText(msg)
+    msgBox.setWindowTitle("Error")
+    msgBox.setStandardButtons(QMessageBox.Ok)
+    msgBox.exec()
+    # msgBox.buttonClicked.connect(msgButtonClick)
+    # returnValue = msgBox.exec()
+    # if returnValue == QMessageBox.Ok:
+    #     print('OK clicked')
+
+
+def showInfoDialog(msg):
+    msg = msg
+    msgBox = QMessageBox()
+    msgBox.setIcon(QMessageBox.Information)
+    msgBox.setText(msg)
+    msgBox.setWindowTitle("Information")
+    msgBox.setStandardButtons(QMessageBox.Ok)
+    msgBox.exec()
+
+
+def msgButtonClick(i):
+    print("Button clicked is:", i.text())
+
+
+def writeCSVRight():
+    # name = QFileDialog.getSaveFileName(self,'Save File')
+    # file = open(name,'w')
+    # # text = textEdit.toPlainText()
+    # file.write(text)
+    # file.close()
+    print("right")
+
+
+def writeCSVLeft():
+    print("left")
     # Python program to convert
     # JSON file to CSV
     # Opening JSON file and loading the data
@@ -199,39 +279,55 @@ def onClose():
 
 
 def sendSettings():  # setup string to device {"g-range":2,"d-rate":100}
-    grange = ui.gravityRange.currentText()
-    global drate
-    drate = ui.speedRate.currentText()
-    s = {
-        "g-range": str(grange),
-        "d-rate": float(drate)
-    }
-    serialSend(s)
+    if serial.isOpen():
+        grange = ui.gravityRange.currentText()
+        global drate
+        drate = ui.speedRate.currentText()
+        s = {
+            "g-range": str(grange),
+            "d-rate": float(drate)
+        }
+        serialSend(s)
+    else:
+        showCriticalDialog(msg="Device port is not open")
 
 
 def startMeasuring():
-    global duration
-    duration = ui.dur.value()  # string for start: {"start":10} \\\10 sec
-    s = {
-        "start": str(duration)
-    }
-    c = getMaxCount()
-    global listX
-    global listY
-    del listX[:]
-    del listY1[:]
-    for x in range(c):
-        listX.append(x)
-    for y in range(c):
-        listY1.append(0)
-    serialSend(s)
+    if serial.isOpen():
+        if not ui.tabTable.isVisible():
+            global duration
+            duration = ui.dur.value()  # string for start: {"start":10} \\\10 sec
+            s = {
+                "start": str(duration)
+            }
+            c = getMaxCount()
+            global listX
+            global listY
+            del listX[:]
+            del listY1[:]
+            for x in range(c):
+                listX.append(x)
+            for y in range(c):
+                listY1.append(0)
+            serialSend(s)
+        else:
+            showCriticalDialog(msg='Chose "Graph right" or "Graph left" for measuring')
+            # return
+    else:
+        showCriticalDialog(msg='Device port is not opened yet. Press "Open port" for continue')
 
 
 def stopMeasuring():  # string for stop: {"stop":1}
-    s = {
-        "stop": 1
-    }
-    serialSend(s)
+    if serial.isOpen():
+        if not ui.tabTable.isVisible():
+            s = {
+                "stop": 1
+            }
+            serialSend(s)
+        else:
+            showCriticalDialog()
+    else:
+        showCriticalDialog(msg='Device port is not opened yet. Press "Open port" for continue')
 
 
 def setProgVal():
@@ -257,31 +353,42 @@ def graphLeftClear():
 def newWinPlot():
     global listX
     global listY
-    pg.plot(listX, listY1)
+    if listX and listY:
+        pg.plot(listX, listY1)
+    else:
+        showInfoDialog(msg="Start measuring first!")
 
 
 def loadTableDataRight():
     global measuringRight
-    row = 0
-    ui.rightTable.setRowCount(len(measuringRight))
-    for measure in measuringRight:
-        ui.rightTable.setItem(row, 0, QtWidgets.QTableWidgetItem(str(measure["count"])))
-        ui.rightTable.setItem(row, 1, QtWidgets.QTableWidgetItem(str(measure["x"])))
-        ui.rightTable.setItem(row, 2, QtWidgets.QTableWidgetItem(str(measure["y"])))
-        ui.rightTable.setItem(row, 3, QtWidgets.QTableWidgetItem(str(measure["z"])))
-        row = row + 1
+    if measuringRight:
+        if measuringRight:
+            row = 0
+            ui.rightTable.setRowCount(len(measuringRight))
+            for measure in measuringRight:
+                ui.rightTable.setItem(row, 0, QtWidgets.QTableWidgetItem(str(measure["count"])))
+                ui.rightTable.setItem(row, 1, QtWidgets.QTableWidgetItem(str(measure["x"])))
+                ui.rightTable.setItem(row, 2, QtWidgets.QTableWidgetItem(str(measure["y"])))
+                ui.rightTable.setItem(row, 3, QtWidgets.QTableWidgetItem(str(measure["z"])))
+                row = row + 1
+    else:
+        showInfoDialog(msg="Start measuring first!")
 
 
 def loadTableDataLeft():
     global measuringLeft
-    row = 0
-    ui.leftTable.setRowCount(len(measuringLeft))
-    for measure in measuringLeft:
-        ui.leftTable.setItem(row, 0, QtWidgets.QTableWidgetItem(str(measure["count"])))
-        ui.leftTable.setItem(row, 1, QtWidgets.QTableWidgetItem(str(measure["x"])))
-        ui.leftTable.setItem(row, 2, QtWidgets.QTableWidgetItem(str(measure["y"])))
-        ui.leftTable.setItem(row, 3, QtWidgets.QTableWidgetItem(str(measure["z"])))
-        row = row + 1
+    if measuringLeft:
+        if measuringLeft:
+            row = 0
+            ui.leftTable.setRowCount(len(measuringLeft))
+            for measure in measuringLeft:
+                ui.leftTable.setItem(row, 0, QtWidgets.QTableWidgetItem(str(measure["count"])))
+                ui.leftTable.setItem(row, 1, QtWidgets.QTableWidgetItem(str(measure["x"])))
+                ui.leftTable.setItem(row, 2, QtWidgets.QTableWidgetItem(str(measure["y"])))
+                ui.leftTable.setItem(row, 3, QtWidgets.QTableWidgetItem(str(measure["z"])))
+                row = row + 1
+    else:
+        showInfoDialog(msg="Start measuring first!")
 
 
 def led():
@@ -313,18 +420,17 @@ ui.ledButton.clicked.connect(led)
 ui.clearBR.clicked.connect(graphRightClear)
 ui.clearBL.clicked.connect(graphLeftClear)
 ui.newWR.clicked.connect(newWinPlot)
+ui.newWL.clicked.connect(newWinPlot)
 ui.fillTR.clicked.connect(loadTableDataRight)
 ui.fillTL.clicked.connect(loadTableDataLeft)
 ui.clearTabRight.clicked.connect(clearRightTab)
 ui.clearTabLeft.clicked.connect(clearLeftTab)
-ui.saveCSVLeft.clicked.connect(test())
-ui.saveCSVRight.clicked.connect(writeCSV)
+ui.saveCSVLeft.clicked.connect(writeCSVLeft)
+ui.saveCSVRight.clicked.connect(writeCSVRight)
+# -------------------------------------------
 
-def test(i):
-    if i:
-        print("i")
+ui.dateEdit.setDate(QDate(date.today()))
 
-# ---------------------------------------------
 ui.progLabel.setText(str(int(ui.dur.value()) * int(ui.speedRate.currentText())))
 ui.progressBar.setValue(0)
 
