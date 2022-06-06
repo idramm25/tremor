@@ -10,6 +10,8 @@ The program is need to starting sudo from venv for port access:
 
 # Some screenshots:
 
+![Alt text](https://github.com/idramm25/tremor/blob/main/Images/qtdesigner.jpg?raw=true "Optional title")
+
 ![Alt text](https://github.com/idramm25/tremor/blob/main/Images/mainWindow.jpg?raw=true "Optional title")
 
 ![Alt text](https://github.com/idramm25/tremor/blob/main/Images/mainWindow1.jpg?raw=true "Optional title")
