@@ -7,7 +7,7 @@ Desktop app was made in Python and PyQt5.
 
 $ pip install -r requirements.txt
 
-The program is need to starting sudo from venv for port access:
+The program is need to sudo privileges from (venv) for Serial port access:
 
 (venv)~$ sudo -E env PATH=$PATH python main.py
 
