@@ -5,7 +5,9 @@ The device is using JSON over Serial protocol to communicate with desktop app.
 Desktop app was made in Python and PyQt5.
 
 $ pip install -r requirements.txt
+
 The program is need to starting sudo from venv for port access:
+
 (venv)~$ sudo -E env PATH=$PATH python main.py
 
 # Some screenshots:
