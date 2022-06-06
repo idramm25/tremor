@@ -1,11 +1,11 @@
 # The tremor project
 Tremorograph based on Arduino board + ADXL345 module
 
-# Some screenshots on links:
+# Some screenshots:
 
-![Alt text](https://github.com/idramm25/tremor/blob/main/Screenshots/mainWindow.png "Optional title")
-
-
+![Alt text](https://github.com/idramm25/tremor/blob/main/Screenshots/mainWindow.jpg?raw=true "Optional title")
 
 
-https://github.com/idramm25/tremor/blob/main/Screenshots/mainWindow1.png
+
+
+![Alt text](https://github.com/idramm25/tremor/blob/main/Screenshots/mainWindow1.jpg?raw=true "Optional title")
