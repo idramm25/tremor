@@ -1,5 +1,5 @@
 # The tremor project
-Tremorograph based on Arduino board + ADXL345 accelerometer module
+Tremorograph based on Arduino board + ADXL345 accelerometer module. Modifiead library included to "device" folder
 
 # Some screenshots:
 
