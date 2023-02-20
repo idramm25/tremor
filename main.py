@@ -220,9 +220,15 @@ def sendSettings():  # setup string to device for example: {"g-range":2,"d-rate"
 
 
 def startMeasuring():
+    global measuringRight
+    global measuringLeft
     if setOk:
         if serial.isOpen():
             if not ui.tabTable.isVisible():
+                if ui.tabRight.isVisible() and measuringRight:
+                    measuringRight.clear()
+                elif ui.tabLeft.isVisible() and measuringLeft:
+                    measuringLeft.clear()
                 global duration
                 duration = ui.dur.value()  # string for start: {"start":10} \\\10 sec
                 s = {
@@ -237,6 +243,7 @@ def startMeasuring():
                     listX.append(x)
                 for y in range(c):
                     listY1.append(0)
+                ui.progressBar.setValue(0)
                 ui.term.appendPlainText("Starting measuring")
                 ui.term.appendPlainText("--------------------------------------")
                 serialSend(s)
