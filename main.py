@@ -13,7 +13,6 @@ import csv
 app = QtWidgets.QApplication([])
 ui = uic.loadUi("design.ui")
 ui.setWindowTitle("Tremorograph ADXL345 v1.0")
-# ---------------------------------------------
 
 
 serial = QSerialPort()
@@ -79,7 +78,6 @@ def onRead():
             listY2.append(z)
             setProgBar(c)
             ui.term.appendPlainText("count: " + str(c) + "x: " + str(x) + "y: " + str(y) + "z: " + str(z))
-            # ui.term.appendPlainText("Starting measuring")
             if c == 0:
                 ui.term.appendPlainText("----------End of data-----------")
         elif "manualstop" in j:
