@@ -305,10 +305,13 @@ def loadTableDataLeft():
 
 
 def led():
-    s = {
-        "led": 1
-    }
-    serialSend(s)
+    if serial.isOpen():
+        s = {
+            "led": 1
+        }
+        serialSend(s)
+    else:
+        showCriticalDialog(msg='Device port is not opened yet. Press "Open port" for continue')
 
 
 def clearRightTab():

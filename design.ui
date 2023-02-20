@@ -17,14 +17,14 @@
    <widget class="QPushButton" name="ledButton">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>550</y>
-      <width>41</width>
+      <x>20</x>
+      <y>570</y>
+      <width>61</width>
       <height>26</height>
      </rect>
     </property>
     <property name="text">
-     <string>Led</string>
+     <string>Test Led</string>
     </property>
    </widget>
    <widget class="QPlainTextEdit" name="term">
@@ -33,7 +33,7 @@
       <x>10</x>
       <y>350</y>
       <width>161</width>
-      <height>191</height>
+      <height>211</height>
      </rect>
     </property>
     <property name="palette">
@@ -96,9 +96,9 @@
        <colorrole role="Text">
         <brush brushstyle="SolidPattern">
          <color alpha="255">
-          <red>255</red>
-          <green>255</green>
-          <blue>255</blue>
+          <red>180</red>
+          <green>180</green>
+          <blue>180</blue>
          </color>
         </brush>
        </colorrole>
@@ -242,9 +242,9 @@
        <colorrole role="Text">
         <brush brushstyle="SolidPattern">
          <color alpha="255">
-          <red>255</red>
-          <green>255</green>
-          <blue>255</blue>
+          <red>180</red>
+          <green>180</green>
+          <blue>180</blue>
          </color>
         </brush>
        </colorrole>
@@ -477,6 +477,11 @@
        </colorrole>
       </disabled>
      </palette>
+    </property>
+    <property name="font">
+     <font>
+      <italic>false</italic>
+     </font>
     </property>
     <property name="statusTip">
      <string/>

@@ -81,7 +81,8 @@ void configuration(void)
                 adxl.setRangeSetting(gRange);
                 adxl.setRate(dataRate);
                 StaticJsonDocument<10> doc;
-                doc["rate"] = adxl.getRate();;
+                doc["rate"] = adxl.getRate();
+//                doc["range"] = adxl.getRangeSetting();
                 serializeJson(doc, Serial);
                 Serial.println();
                 conFlag = true;
