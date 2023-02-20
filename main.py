@@ -1,14 +1,12 @@
 # starting sudo from venv for port access:
 # sudo -E env PATH=$PATH python main.py
-import sys, os
+import sys
 from datetime import date
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtSerialPort import QSerialPort, QSerialPortInfo
 from PyQt5.QtCore import QIODevice, QDate
 import pyqtgraph as pg
-from PyQt5.QtWidgets import QMessageBox, QFileDialog, QWidget
-
-
+from PyQt5.QtWidgets import QMessageBox, QFileDialog
 import json
 import csv
 
@@ -128,6 +126,34 @@ def writeCSVLeft():
 
 def writeCSVRight():
     save_data_to_csv(measuringRight)
+
+
+def save_entry_data(patient_name, patient_age, description, date, doctor_name):
+    options = QFileDialog.Options()
+    options |= QFileDialog.DontUseNativeDialog
+    filename, _ = QFileDialog.getSaveFileName(None, "Save Data", "", "Text Files (*.txt);;All Files (*)",
+                                              options=options)
+
+    if filename:
+        with open(filename, 'w') as file:
+            file.write(f'Patient Name: {patient_name}\n')
+            file.write(f'Patient Age: {patient_age}\n')
+            file.write(f'Description: {description}\n')
+            file.write(f'Date: {date}\n')
+            file.write(f'Doctor Name: {doctor_name}\n')
+        print('Data saved successfully')
+
+
+def create_entry_clicked():
+    patient_name = ui.patientName.text()
+    patient_age = ui.patientAge.text()
+    description = ui.description.toPlainText()
+    date = ui.dateEdit.text()
+    doctor_name = ui.doctorName.text()
+    if patient_name and patient_age and description and doctor_name:
+        save_entry_data(patient_name, patient_age, description, date, doctor_name)
+    else:
+        showCriticalDialog("Entry fields are unfilled")
 
 
 def drawGraph(i):
@@ -327,30 +353,6 @@ def clearLeftTab():
 
 
 ###########################################################
-def save_data(patient_name, patient_age, description, date, doctor_name):
-    options = QFileDialog.Options()
-    options |= QFileDialog.DontUseNativeDialog
-    filename, _ = QFileDialog.getSaveFileName(None, "Save Data", "", "Text Files (*.txt);;All Files (*)",
-                                              options=options)
-
-    if filename:
-        with open(filename, 'w') as file:
-            file.write(f'Patient Name: {patient_name}\n')
-            file.write(f'Patient Age: {patient_age}\n')
-            file.write(f'Description: {description}\n')
-            file.write(f'Date: {date}\n')
-            file.write(f'Doctor Name: {doctor_name}\n')
-        print('Data saved successfully')
-
-
-def create_entry_clicked():
-    patient_name = ui.patientName.text()
-    patient_age = ui.patientAge.text()
-    description = ui.description.toPlainText()
-    date = ui.dateEdit.text()
-    doctor_name = ui.doctorName.text()
-    save_data(patient_name, patient_age, description, date, doctor_name)
-
 
 ###########################################################
 ui.speedRate.currentIndexChanged.connect(setProgVal)
