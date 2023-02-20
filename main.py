@@ -153,7 +153,7 @@ def create_entry_clicked():
     if patient_name and patient_age and description and doctor_name:
         save_entry_data(patient_name, patient_age, description, date, doctor_name)
     else:
-        showCriticalDialog("Entry fields are unfilled")
+        showCriticalDialog("Some entry field is unfilled")
 
 
 def drawGraph(i):
