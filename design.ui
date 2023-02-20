@@ -1333,7 +1333,7 @@
      </widget>
     </widget>
    </widget>
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="createEntryButton">
     <property name="geometry">
      <rect>
       <x>20</x>

@@ -1,13 +1,13 @@
 # starting sudo from venv for port access:
 # sudo -E env PATH=$PATH python main.py
-import sys
+import sys, os
 from datetime import date
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtSerialPort import QSerialPort, QSerialPortInfo
 from PyQt5.QtCore import QIODevice, QDate
 import pyqtgraph as pg
 from PyQt5.QtWidgets import QMessageBox, QFileDialog, QWidget
-# from saveFileDialog import app
+
 
 import json
 import csv
@@ -94,49 +94,6 @@ def onRead():
         drawGraph(rl)
 
 
-# def saveFileDialog():
-#     options = QFileDialog.Options()
-#     options |= QFileDialog.DontUseNativeDialog
-#     name, _ = QFileDialog.getSaveFileName(None,
-#                                           "", "CSV Files (*.csv);;All Files (*)",
-#                                           options=options)
-#     file = open(name, 'w')
-#     # text = self.textEdit.toPlainText()
-#     text = "hello"
-#     file.write(text)
-#     file.close()
-
-
-class SaveFile(QWidget):
-
-    def __init__(self):
-        super().__init__(self)
-        self.title = 'PyQt5 file dialogs - pythonspot.com'
-        self.left = 10
-        self.top = 10
-        self.width = 640
-        self.height = 480
-        self.initUI()
-
-    def initUI(self):
-        self.setWindowTitle(self.title)
-        self.setGeometry(self.left, self.top, self.width, self.height)
-        # self.openFileNameDialog()
-        # self.openFileNamesDialog()
-        # self.saveFileDialog()
-        self.file_save()
-        # self.show()
-
-    def file_save(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        name, _ = QFileDialog.getSaveFileName(self, "QFileDialog.getSaveFileName()", "", "CSV Files (*.csv);;All Files (*)", options=options)
-        file = open(name,'w')
-        # text = self.textEdit.toPlainText()
-        text = "hello"
-        file.write(text)
-        file.close()
-
 def showCriticalDialog(msg):
     msg = msg
     msgBox = QMessageBox()
@@ -165,76 +122,23 @@ def msgButtonClick(i):
     print("Button clicked is:", i.text())
 
 
-def writeCSVRight():
-    # name = QFileDialog.getSaveFileName(self,'Save File')
-    # file = open(name,'w')
-    # # text = textEdit.toPlainText()
-    # file.write(text)
-    # file.close()
-    print("right")
+def save_data_to_csv(measuring_data):
+    file_path, _ = QFileDialog.getSaveFileName(None, "Save File", "", "CSV Files (*.csv)")
+    if file_path:
+        with open(file_path, mode='w', newline='') as file:
+            field_names = ['count', 'x', 'y', 'z']
+            writer = csv.DictWriter(file, fieldnames=field_names)
+            writer.writeheader()
+            for row in measuring_data:
+                writer.writerow(row)
 
 
 def writeCSVLeft():
-    print("left")
-    # Python program to convert
-    # JSON file to CSV
-    # Opening JSON file and loading the data
-    # into the variable data
-    # with open('data.json') as json_file:
-    #     data = json.load(json_file)
-    #
-    # employee_data = data['emp_details']
-    #
-    # # now we will open a file for writing
-    # data_file = open('data_file.csv', 'w')
-    #
-    # # create the csv writer object
-    # csv_writer = csv.writer(data_file)
-    #
-    # # Counter variable used for writing
-    # # headers to the CSV file
-    # count = 0
-    #
-    # for emp in employee_data:
-    #     if count == 0:
-    #         # Writing headers of CSV file
-    #         header = emp.keys()
-    #         csv_writer.writerow(header)
-    #         count += 1
-    #
-    #     # Writing data of CSV file
-    #     csv_writer.writerow(emp.values())
-    #
-    # data_file.close()
+    save_data_to_csv(measuringLeft)
 
 
-# -------------------------------------------------------------------------
-
-# class CustomDialog(QDialog):  # https://www.pythonguis.com/tutorials/pyqt-dialogs/
-#     def __init__(self, parent=None):
-#         super().__init__(parent)
-#
-#         self.setWindowTitle("HELLO!")
-#
-#         QBtn = QDialogButtonBox.Ok | QDialogButtonBox.Cancel
-#
-#         self.buttonBox = QDialogButtonBox(QBtn)
-#         self.buttonBox.accepted.connect(self.accept)
-#         self.buttonBox.rejected.connect(self.reject)
-#
-#         self.layout = QVBoxLayout()
-#         message = QLabel("Something happened, is that OK?")
-#         self.layout.addWidget(message)
-#         self.layout.addWidget(self.buttonBox)
-#         self.setLayout(self.layout)
-
-
-# def file_save(self):
-#     name = QtGui.QFileDialog.getSaveFileName(self, 'Save File')
-#     file = open(name, 'w')
-#     text = self.textEdit.toPlainText()
-#     file.write(text)
-#     file.close()
+def writeCSVRight():
+    save_data_to_csv(measuringRight)
 
 
 def drawGraph(i):
@@ -267,8 +171,6 @@ def onOpen():
 
 
 def serialSend(data):  # int list
-    # print(data)
-    # if serial.isOpen():
     serial.write(json.dumps(data).encode())
     serial.flush()
 
@@ -278,7 +180,7 @@ def onClose():
     print("closed " + serial.portName())
 
 
-def sendSettings():  # setup string to device {"g-range":2,"d-rate":100}
+def sendSettings():  # setup string to device for example: {"g-range":2,"d-rate":100}
     if serial.isOpen():
         grange = ui.gravityRange.currentText()
         global drate
@@ -312,7 +214,6 @@ def startMeasuring():
             serialSend(s)
         else:
             showCriticalDialog(msg='Chose "Graph right" or "Graph left" for measuring')
-            # return
     else:
         showCriticalDialog(msg='Device port is not opened yet. Press "Open port" for continue')
 
@@ -406,6 +307,43 @@ def clearLeftTab():
     ui.leftTable.setRowCount(0)
 
 
+###########################################################
+def save_data(patient_name, patient_age, description, date, doctor_name):
+    # Открыть диалог сохранения файла
+    options = QFileDialog.Options()
+    options |= QFileDialog.DontUseNativeDialog
+    filename, _ = QFileDialog.getSaveFileName(None, "Save Data", "", "Text Files (*.txt);;All Files (*)",
+                                              options=options)
+
+    # Если пользователь выбрал файл
+    if filename:
+        # Открыть файл на запись
+        with open(filename, 'w') as file:
+            # Записать данные
+            file.write(f'Patient Name: {patient_name}\n')
+            file.write(f'Patient Age: {patient_age}\n')
+            file.write(f'Description: {description}\n')
+            file.write(f'Date: {date}\n')
+            file.write(f'Doctor Name: {doctor_name}\n')
+        print('Data saved successfully')
+
+
+def create_entry_clicked():
+    # Получить значения полей ввода
+    patient_name = ui.patientName.text()
+    patient_age = ui.patientAge.text()
+    # description = ui.description.text()
+    description = ui.description.toPlainText()
+    date = ui.dateEdit.text()
+    doctor_name = ui.doctorName.text()
+
+    # Сохранить данные
+    save_data(patient_name, patient_age, description, date, doctor_name)
+
+
+###########################################################
+
+
 ui.speedRate.currentIndexChanged.connect(setProgVal)
 ui.dur.valueChanged.connect(setProgVal)
 
@@ -427,6 +365,7 @@ ui.clearTabRight.clicked.connect(clearRightTab)
 ui.clearTabLeft.clicked.connect(clearLeftTab)
 ui.saveCSVLeft.clicked.connect(writeCSVLeft)
 ui.saveCSVRight.clicked.connect(writeCSVRight)
+ui.createEntryButton.clicked.connect(create_entry_clicked)
 # -------------------------------------------
 
 ui.dateEdit.setDate(QDate(date.today()))
