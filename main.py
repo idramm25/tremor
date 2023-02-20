@@ -34,6 +34,7 @@ ui.gravityRange.addItems(gravityList)
 duration = 0
 countR = 0
 drate = 0
+setOk = False
 listX = []
 listY = []
 listY1 = []
@@ -59,17 +60,13 @@ def onRead():
         elif "rate" not in j and ui.tabLeft.isVisible():
             rl = 2
             measuringLeft.append(j)
-        # elif "rate" not in j and ui.tabTable.isVisible():
-        #     showCriticalDialog()
-        #     serial.flush()
-        #     return
-        #     # dlg = CustomDialog()
-        # dlg.exec()
-
         if "led" in j:
-            ui.term.appendPlainText(str(j['led']))
+            ui.term.appendPlainText("Led " + str(j['led']))
+            ui.term.appendPlainText("--------------------------------------")
         elif "rate" in j:
-            ui.term.appendPlainText(str(j['rate']))
+            ui.term.appendPlainText("Rate " + str(j['rate']) + " Hz")
+            ui.term.appendPlainText("Range " + ui.gravityRange.currentText() + " G")
+            ui.term.appendPlainText("--------------------------------------")
         elif "count" in j:
             c = j['count']
             x = j['x']
@@ -82,14 +79,14 @@ def onRead():
             listY.append(x)
             listY1.append(y)
             listY2.append(z)
-            # ui.graph.clear()
-            # ui.graph.plot(listX, listY1)
-            # ui.graph.plot(listX, listY1)
-            # ui.graph.plot(listX, listY2)
             setProgBar(c)
             ui.term.appendPlainText("count: " + str(c) + "x: " + str(x) + "y: " + str(y) + "z: " + str(z))
+            # ui.term.appendPlainText("Starting measuring")
+            if c == 0:
+                ui.term.appendPlainText("----------End of data-----------")
         elif "manualstop" in j:
             ui.term.appendPlainText("Manual stop")
+            ui.term.appendPlainText("--------------------------------------")
     if countR == 0:
         drawGraph(rl)
 
@@ -102,10 +99,6 @@ def showCriticalDialog(msg):
     msgBox.setWindowTitle("Error")
     msgBox.setStandardButtons(QMessageBox.Ok)
     msgBox.exec()
-    # msgBox.buttonClicked.connect(msgButtonClick)
-    # returnValue = msgBox.exec()
-    # if returnValue == QMessageBox.Ok:
-    #     print('OK clicked')
 
 
 def showInfoDialog(msg):
@@ -116,10 +109,6 @@ def showInfoDialog(msg):
     msgBox.setWindowTitle("Information")
     msgBox.setStandardButtons(QMessageBox.Ok)
     msgBox.exec()
-
-
-def msgButtonClick(i):
-    print("Button clicked is:", i.text())
 
 
 def save_data_to_csv(measuring_data):
@@ -164,6 +153,7 @@ def setProgBar(c):
     ui.progressBar.setValue(int(i))
 
 
+
 def serialSend(data):  # int list
     serial.write(json.dumps(data).encode())
     serial.flush()
@@ -174,15 +164,20 @@ def onOpen():
     serial.open(QIODevice.ReadWrite)
     print("opened " + serial.portName())
     ui.term.appendPlainText("Port " + serial.portName() + " opened")
+    ui.term.appendPlainText("--------------------------------------")
 
 
 def onClose():
+    global setOk
     serial.close()
+    setOk = False
     print("closed " + serial.portName())
     ui.term.appendPlainText("Port " + serial.portName() + " closed")
+    ui.term.appendPlainText("--------------------------------------")
 
 
 def sendSettings():  # setup string to device for example: {"g-range":2,"d-rate":100}
+    global setOk
     if serial.isOpen():
         grange = ui.gravityRange.currentText()
         global drate
@@ -192,32 +187,39 @@ def sendSettings():  # setup string to device for example: {"g-range":2,"d-rate"
             "d-rate": float(drate)
         }
         serialSend(s)
+        setOk = True
+        ui.term.appendPlainText("Send settings...")
     else:
         showCriticalDialog(msg="Device port is not open")
 
 
 def startMeasuring():
-    if serial.isOpen():
-        if not ui.tabTable.isVisible():
-            global duration
-            duration = ui.dur.value()  # string for start: {"start":10} \\\10 sec
-            s = {
-                "start": str(duration)
-            }
-            c = getMaxCount()
-            global listX
-            global listY
-            del listX[:]
-            del listY1[:]
-            for x in range(c):
-                listX.append(x)
-            for y in range(c):
-                listY1.append(0)
-            serialSend(s)
+    if setOk:
+        if serial.isOpen():
+            if not ui.tabTable.isVisible():
+                global duration
+                duration = ui.dur.value()  # string for start: {"start":10} \\\10 sec
+                s = {
+                    "start": str(duration)
+                }
+                c = getMaxCount()
+                global listX
+                global listY
+                del listX[:]
+                del listY1[:]
+                for x in range(c):
+                    listX.append(x)
+                for y in range(c):
+                    listY1.append(0)
+                ui.term.appendPlainText("Starting measuring")
+                ui.term.appendPlainText("--------------------------------------")
+                serialSend(s)
+            else:
+                showCriticalDialog(msg='Chose "Graph right" or "Graph left" for measuring')
         else:
-            showCriticalDialog(msg='Chose "Graph right" or "Graph left" for measuring')
+            showCriticalDialog(msg='Device port is not opened yet. Press "Open port" for continue')
     else:
-        showCriticalDialog(msg='Device port is not opened yet. Press "Open port" for continue')
+        showCriticalDialog(msg='Please set the measuring speed and gravity range first')
 
 
 def stopMeasuring():  # string for stop: {"stop":1}
@@ -243,6 +245,8 @@ def graphRightClear():
     del listX[:]
     del listY[:]
     ui.graphRight.clear()
+    global measuringRight
+    measuringRight.clear()
 
 
 def graphLeftClear():
@@ -251,6 +255,8 @@ def graphLeftClear():
     del listX[:]
     del listY[:]
     ui.graphLeft.clear()
+    global measuringLeft
+    measuringLeft.clear()
 
 
 def newWinPlot():
@@ -274,6 +280,8 @@ def loadTableDataRight():
                 ui.rightTable.setItem(row, 2, QtWidgets.QTableWidgetItem(str(measure["y"])))
                 ui.rightTable.setItem(row, 3, QtWidgets.QTableWidgetItem(str(measure["z"])))
                 row = row + 1
+        ui.term.appendPlainText("Right table filled ok")
+        ui.term.appendPlainText("--------------------------------------")
     else:
         showInfoDialog(msg="Start measuring first!")
 
@@ -290,6 +298,8 @@ def loadTableDataLeft():
                 ui.leftTable.setItem(row, 2, QtWidgets.QTableWidgetItem(str(measure["y"])))
                 ui.leftTable.setItem(row, 3, QtWidgets.QTableWidgetItem(str(measure["z"])))
                 row = row + 1
+        ui.term.appendPlainText("Left table filled ok")
+        ui.term.appendPlainText("--------------------------------------")
     else:
         showInfoDialog(msg="Start measuring first!")
 
@@ -303,25 +313,25 @@ def led():
 
 def clearRightTab():
     ui.rightTable.setRowCount(0)
+    global measuringRight
+    measuringRight.clear()
 
 
 def clearLeftTab():
     ui.leftTable.setRowCount(0)
+    global measuringLeft
+    measuringLeft.clear()
 
 
 ###########################################################
 def save_data(patient_name, patient_age, description, date, doctor_name):
-    # Открыть диалог сохранения файла
     options = QFileDialog.Options()
     options |= QFileDialog.DontUseNativeDialog
     filename, _ = QFileDialog.getSaveFileName(None, "Save Data", "", "Text Files (*.txt);;All Files (*)",
                                               options=options)
 
-    # Если пользователь выбрал файл
     if filename:
-        # Открыть файл на запись
         with open(filename, 'w') as file:
-            # Записать данные
             file.write(f'Patient Name: {patient_name}\n')
             file.write(f'Patient Age: {patient_age}\n')
             file.write(f'Description: {description}\n')
@@ -331,24 +341,17 @@ def save_data(patient_name, patient_age, description, date, doctor_name):
 
 
 def create_entry_clicked():
-    # Получить значения полей ввода
     patient_name = ui.patientName.text()
     patient_age = ui.patientAge.text()
-    # description = ui.description.text()
     description = ui.description.toPlainText()
     date = ui.dateEdit.text()
     doctor_name = ui.doctorName.text()
-
-    # Сохранить данные
     save_data(patient_name, patient_age, description, date, doctor_name)
 
 
 ###########################################################
-
-
 ui.speedRate.currentIndexChanged.connect(setProgVal)
 ui.dur.valueChanged.connect(setProgVal)
-
 serial.readyRead.connect(onRead)
 # ------BUTTONS--------------------
 ui.openB.clicked.connect(onOpen)
@@ -369,11 +372,8 @@ ui.saveCSVLeft.clicked.connect(writeCSVLeft)
 ui.saveCSVRight.clicked.connect(writeCSVRight)
 ui.createEntryButton.clicked.connect(create_entry_clicked)
 # -------------------------------------------
-
 ui.dateEdit.setDate(QDate(date.today()))
-
 ui.progLabel.setText(str(int(ui.dur.value()) * int(ui.speedRate.currentText())))
 ui.progressBar.setValue(0)
-
 ui.show()
 sys.exit(app.exec())
