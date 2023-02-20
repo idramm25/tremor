@@ -164,20 +164,22 @@ def setProgBar(c):
     ui.progressBar.setValue(int(i))
 
 
-def onOpen():
-    serial.setPortName(ui.comL.currentText())
-    serial.open(QIODevice.ReadWrite)
-    print("opened " + serial.portName())
-
-
 def serialSend(data):  # int list
     serial.write(json.dumps(data).encode())
     serial.flush()
 
 
+def onOpen():
+    serial.setPortName(ui.comL.currentText())
+    serial.open(QIODevice.ReadWrite)
+    print("opened " + serial.portName())
+    ui.term.appendPlainText("Port " + serial.portName() + " opened")
+
+
 def onClose():
     serial.close()
     print("closed " + serial.portName())
+    ui.term.appendPlainText("Port " + serial.portName() + " closed")
 
 
 def sendSettings():  # setup string to device for example: {"g-range":2,"d-rate":100}
